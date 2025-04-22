@@ -1,4 +1,4 @@
-import { ChainId, Currency, Ether } from '@uniswap/sdk-core';
+import { ChainId, Currency, Ether } from '@thienlk/sdk-code';
 import { USDT_ON } from '../../build/main';
 import {
   CEUR_CELO,

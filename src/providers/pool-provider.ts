@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Currency } from '@uniswap/sdk-core';
-import { Pool as V3Pool } from '@uniswap/v3-sdk';
-import { Pool as V4Pool } from '@uniswap/v4-sdk';
+import { ChainId, Currency } from '@thienlk/sdk-code';
+import { Pool as V3Pool } from '@thienlk/v3-sdk';
+import { Pool as V4Pool } from '@thienlk/v4-sdk';
 import { Options as RetryOptions } from 'async-retry';
 import _ from 'lodash';
 

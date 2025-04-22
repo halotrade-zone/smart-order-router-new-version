@@ -1,5 +1,5 @@
-import { Protocol } from '@uniswap/router-sdk';
-import { Token } from '@uniswap/sdk-core';
+import { Protocol } from '@thienlk/router-sdk';
+import { Token } from '@thienlk/sdk-code';
 import { SubgraphPool } from '../routers/alpha-router/functions/get-candidate-pools';
 import { log } from '../util';
 import { ProviderConfig } from './provider';

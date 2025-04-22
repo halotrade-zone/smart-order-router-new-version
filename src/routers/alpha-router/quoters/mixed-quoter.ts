@@ -1,5 +1,5 @@
-import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Currency, TradeType } from '@uniswap/sdk-core';
+import { Protocol } from '@thienlk/router-sdk';
+import { ChainId, Currency, TradeType } from '@thienlk/sdk-code';
 import _ from 'lodash';
 
 import {
@@ -38,7 +38,7 @@ import { IGasModel } from '../gas-models';
 
 import { BaseQuoter } from './base-quoter';
 import { GetQuotesResult, GetRoutesResult } from './model';
-import { UniversalRouterVersion } from '@uniswap/universal-router-sdk';
+import { UniversalRouterVersion } from '@thienlk/universal-router-sdk';
 import {
   mixedRouteFilterOutV4Pools
 } from '../../../util/mixedRouteFilterOutV4Pools';

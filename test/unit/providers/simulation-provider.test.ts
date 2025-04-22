@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { Trade } from '@uniswap/router-sdk';
-import { ChainId, Percent, TradeType } from '@uniswap/sdk-core';
+import { Trade } from '@thienlk/router-sdk';
+import { ChainId, Percent, TradeType } from '@thienlk/sdk-code';
 import { BigNumber } from 'ethers';
 import sinon from 'sinon';
 import {
@@ -26,7 +26,7 @@ import {
 } from '../../../src/providers/portion-provider';
 import { Erc20 } from '../../../src/types/other/Erc20';
 import { Permit2 } from '../../../src/types/other/Permit2';
-import { UniversalRouterVersion } from '@uniswap/universal-router-sdk';
+import { UniversalRouterVersion } from '@thienlk/universal-router-sdk';
 
 let tokenContract: Erc20;
 let permit2Contract: Permit2;

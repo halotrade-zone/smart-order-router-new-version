@@ -1,5 +1,5 @@
-import { Protocol } from '@uniswap/router-sdk';
-import { CurrencyAmount, TradeType } from '@uniswap/sdk-core';
+import { Protocol } from '@thienlk/router-sdk';
+import { CurrencyAmount, TradeType } from '@thienlk/sdk-code';
 import { DAI_MAINNET as DAI, USDC_MAINNET as USDC, WBTC_MAINNET as WBTC } from '../../../../../build/main';
 import { CachedRoutes, CacheMode } from '../../../../../src';
 import { InMemoryRouteCachingProvider } from './test-util/inmemory-route-caching-provider';

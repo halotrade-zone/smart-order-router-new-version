@@ -1,8 +1,8 @@
-import { TPool } from '@uniswap/router-sdk';
-import { ChainId, Currency, Token } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
-import { Pool as V3Pool } from '@uniswap/v3-sdk';
-import { Pool as V4Pool } from '@uniswap/v4-sdk';
+import { TPool } from '@thienlk/router-sdk';
+import { ChainId, Currency, Token } from '@thienlk/sdk-code';
+import { Pair } from '@thienlk/v2-sdk';
+import { Pool as V3Pool } from '@thienlk/v3-sdk';
+import { Pool as V4Pool } from '@thienlk/v4-sdk';
 
 import {
   getAddressLowerCase,

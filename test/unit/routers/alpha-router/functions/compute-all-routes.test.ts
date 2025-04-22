@@ -1,6 +1,6 @@
-import { Pair } from '@uniswap/v2-sdk';
-import { encodeSqrtRatioX96, FeeAmount, Pool as V3Pool } from '@uniswap/v3-sdk';
-import { Pool as V4Pool } from '@uniswap/v4-sdk';
+import { Pair } from '@thienlk/v2-sdk';
+import { encodeSqrtRatioX96, FeeAmount, Pool as V3Pool } from '@thienlk/v3-sdk';
+import { Pool as V4Pool } from '@thienlk/v4-sdk';
 import {
   CurrencyAmount,
   DAI_MAINNET as DAI,
@@ -39,8 +39,8 @@ import {
   WETH9_USDT_V4_LOW,
   WETH_USDT
 } from '../../../../test-util/mock-data';
-import { ADDRESS_ZERO } from '@uniswap/router-sdk';
-import { ChainId, WETH9 } from '@uniswap/sdk-core';
+import { ADDRESS_ZERO } from '@thienlk/router-sdk';
+import { ChainId, WETH9 } from '@thienlk/sdk-code';
 
 describe('compute all v4 routes', () => {
   test('succeeds to compute all routes', async () => {

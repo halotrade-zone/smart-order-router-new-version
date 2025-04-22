@@ -4,10 +4,10 @@ import {
   Currency,
   SWAP_ROUTER_02_ADDRESSES as SWAP_ROUTER_02_ADDRESSES_HELPER,
   Token,
-} from '@uniswap/sdk-core';
-import { FACTORY_ADDRESS } from '@uniswap/v3-sdk';
+} from '@thienlk/sdk-code';
+import { FACTORY_ADDRESS } from '@thienlk/v3-sdk';
 
-import { ADDRESS_ZERO } from '@uniswap/router-sdk';
+import { ADDRESS_ZERO } from '@thienlk/router-sdk';
 import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
 
 export const BNB_TICK_LENS_ADDRESS =

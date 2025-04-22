@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Ether } from '@uniswap/sdk-core';
+import { Currency, CurrencyAmount, Ether } from '@thienlk/sdk-code';
 import { BigNumber } from 'ethers';
 import {
   DAI_MAINNET,

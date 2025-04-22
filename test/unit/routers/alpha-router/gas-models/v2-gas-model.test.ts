@@ -1,4 +1,4 @@
-import { Currency, Ether } from '@uniswap/sdk-core';
+import { Currency, Ether } from '@thienlk/sdk-code';
 import { BigNumber } from 'ethers';
 import { DAI_MAINNET, USDC_MAINNET, V2Route } from '../../../../../src';
 import {

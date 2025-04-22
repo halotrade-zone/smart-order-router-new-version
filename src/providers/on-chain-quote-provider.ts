@@ -6,13 +6,13 @@ import {
   encodeMixedRouteToPath,
   MixedRouteSDK,
   Protocol,
-} from '@uniswap/router-sdk';
-import { ChainId } from '@uniswap/sdk-core';
-import { encodeRouteToPath as encodeV3RouteToPath } from '@uniswap/v3-sdk';
+} from '@thienlk/router-sdk';
+import { ChainId } from '@thienlk/sdk-code';
+import { encodeRouteToPath as encodeV3RouteToPath } from '@thienlk/v3-sdk';
 import {
   encodeRouteToPath as encodeV4RouteToPath,
   Pool as V4Pool,
-} from '@uniswap/v4-sdk';
+} from '@thienlk/v4-sdk';
 import retry, { Options as RetryOptions } from 'async-retry';
 import _ from 'lodash';
 import stats from 'stats-lite';

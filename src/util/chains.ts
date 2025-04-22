@@ -4,7 +4,7 @@ import {
   Ether,
   NativeCurrency,
   Token,
-} from '@uniswap/sdk-core';
+} from '@thienlk/sdk-code';
 
 // WIP: Gnosis, Moonbeam
 export const SUPPORTED_CHAINS: ChainId[] = [

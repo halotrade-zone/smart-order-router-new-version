@@ -1,5 +1,5 @@
-import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { Protocol } from '@thienlk/router-sdk';
+import { ChainId, Token } from '@thienlk/sdk-code';
 
 import { ProviderConfig } from '../provider';
 import { SubgraphProvider } from '../subgraph-provider';
