@@ -5,10 +5,12 @@ import {
   SWAP_ROUTER_02_ADDRESSES as SWAP_ROUTER_02_ADDRESSES_HELPER,
   Token,
 } from '@thienlk/sdk-code';
-import { FACTORY_ADDRESS } from '@thienlk/v3-sdk';
 
 import { ADDRESS_ZERO } from '@thienlk/router-sdk';
 import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
+
+// Define FACTORY_ADDRESS since it's not exported from @thienlk/sdk-code
+const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
 
 export const BNB_TICK_LENS_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.BNB].tickLensAddress;
@@ -20,42 +22,36 @@ export const BNB_V3_MIGRATOR_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.BNB].v3MigratorAddress;
 
 export const V3_CORE_FACTORY_ADDRESSES: AddressMap = {
-  ...constructSameAddressMap(FACTORY_ADDRESS),
-  [ChainId.CELO]: CHAIN_TO_ADDRESSES_MAP[ChainId.CELO].v3CoreFactoryAddress,
-  [ChainId.CELO_ALFAJORES]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.CELO_ALFAJORES].v3CoreFactoryAddress,
-  [ChainId.OPTIMISM_GOERLI]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.OPTIMISM_GOERLI].v3CoreFactoryAddress,
-  [ChainId.OPTIMISM_SEPOLIA]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.OPTIMISM_SEPOLIA].v3CoreFactoryAddress,
-  [ChainId.SEPOLIA]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.SEPOLIA].v3CoreFactoryAddress,
-  [ChainId.ARBITRUM_GOERLI]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.ARBITRUM_GOERLI].v3CoreFactoryAddress,
-  [ChainId.ARBITRUM_SEPOLIA]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.ARBITRUM_SEPOLIA].v3CoreFactoryAddress,
-  [ChainId.BNB]: CHAIN_TO_ADDRESSES_MAP[ChainId.BNB].v3CoreFactoryAddress,
-  [ChainId.AVALANCHE]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.AVALANCHE].v3CoreFactoryAddress,
-  [ChainId.BASE_GOERLI]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_GOERLI].v3CoreFactoryAddress,
-  [ChainId.BASE]: CHAIN_TO_ADDRESSES_MAP[ChainId.BASE].v3CoreFactoryAddress,
-  [ChainId.BLAST]: CHAIN_TO_ADDRESSES_MAP[ChainId.BLAST].v3CoreFactoryAddress,
-  [ChainId.ZORA]: CHAIN_TO_ADDRESSES_MAP[ChainId.ZORA].v3CoreFactoryAddress,
-  [ChainId.ZKSYNC]: CHAIN_TO_ADDRESSES_MAP[ChainId.ZKSYNC].v3CoreFactoryAddress,
-  [ChainId.WORLDCHAIN]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.WORLDCHAIN].v3CoreFactoryAddress,
-  [ChainId.UNICHAIN_SEPOLIA]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN_SEPOLIA].v3CoreFactoryAddress,
-  [ChainId.MONAD_TESTNET]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.MONAD_TESTNET].v3CoreFactoryAddress,
-  [ChainId.BASE_SEPOLIA]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.BASE_SEPOLIA].v3CoreFactoryAddress,
-  // TODO: Gnosis + Moonbeam contracts to be deployed
-  [ChainId.UNICHAIN]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN].v3CoreFactoryAddress,
-  [ChainId.SONEIUM]:
-    CHAIN_TO_ADDRESSES_MAP[ChainId.SONEIUM].v3CoreFactoryAddress,
+  ...constructSameAddressMap('0x1F98431c8aD98523631AE4a59f267346ea31F984', [
+    ChainId.MAINNET,
+    ChainId.GOERLI,
+    ChainId.SEPOLIA,
+    ChainId.POLYGON,
+    ChainId.POLYGON_MUMBAI,
+    ChainId.ARBITRUM_ONE,
+    ChainId.ARBITRUM_GOERLI,
+    ChainId.OPTIMISM,
+    ChainId.OPTIMISM_GOERLI,
+    ChainId.CELO,
+    ChainId.CELO_ALFAJORES,
+    ChainId.ARBITRUM_SEPOLIA,
+    ChainId.BNB,
+    ChainId.AVALANCHE,
+    ChainId.BASE_GOERLI,
+    ChainId.BASE,
+    ChainId.BLAST,
+    ChainId.ZORA,
+    ChainId.ZKSYNC,
+    ChainId.WORLDCHAIN,
+    ChainId.UNICHAIN_SEPOLIA,
+    ChainId.MONAD_TESTNET,
+    ChainId.BASE_SEPOLIA,
+    ChainId.OPTIMISM_SEPOLIA,
+    ChainId.UNICHAIN,
+    ChainId.SONEIUM,
+    ChainId.AURA_EUPHORIA,
+  ]),
+  [ChainId.AURA_EUPHORIA]: '0x12F37127C0E4B107f33cc3A58A4BE0F82359D509',
 };
 
 export const QUOTER_V2_ADDRESSES: AddressMap = {
@@ -91,6 +87,7 @@ export const QUOTER_V2_ADDRESSES: AddressMap = {
   // TODO: Gnosis + Moonbeam contracts to be deployed
   [ChainId.UNICHAIN]: CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN].quoterAddress,
   [ChainId.SONEIUM]: CHAIN_TO_ADDRESSES_MAP[ChainId.SONEIUM].quoterAddress,
+  [ChainId.AURA_EUPHORIA]: '0xE095e79D850F44CcF27Df972030A20b6D4A128cC',
 };
 
 export const NEW_QUOTER_V2_ADDRESSES: AddressMap = {
@@ -161,7 +158,7 @@ export const MIXED_ROUTE_QUOTER_V1_ADDRESSES: AddressMap = {
 export const MIXED_ROUTE_QUOTER_V2_ADDRESSES: AddressMap = {
   [ChainId.SEPOLIA]:
     CHAIN_TO_ADDRESSES_MAP[ChainId.SEPOLIA].mixedRouteQuoterV2Address,
-  [ChainId.MAINNET]: '0xE63C5F5005909E96b5aA9CE10744CCE70eC16CC3',
+  [ChainId.MAINNET]: '0xE63C5F5005909E96b5A9CE10744CCE70eC16CC3',
   [ChainId.BASE]: '0xc7A3b85D43fF66AD98A895dE0EaE4b9e24C932D7',
   [ChainId.UNICHAIN]: '0x48C0648E357639B446C99a6c7316A3eaFEaB35aE',
   [ChainId.ARBITRUM_ONE]: '0x9D0F15f2cf58655fDDcD1EE6129C547fDaeD01b1',
@@ -208,6 +205,7 @@ export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
   // TODO: Gnosis + Moonbeam contracts to be deployed
   [ChainId.UNICHAIN]: CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN].multicallAddress,
   [ChainId.SONEIUM]: CHAIN_TO_ADDRESSES_MAP[ChainId.SONEIUM].multicallAddress,
+  [ChainId.AURA_EUPHORIA]: '0x7789082672b6E5b39B888ad4ef73E1FB39ab0815',
 };
 
 export const SWAP_ROUTER_02_ADDRESSES = (chainId: number): string => {
@@ -420,6 +418,13 @@ export const WETH9: {
     'WETH',
     'Wrapped Ether'
   ),
+  [ChainId.AURA_EUPHORIA]: new Token(
+    ChainId.AURA_EUPHORIA,
+    '0x220c08739c70a3e33b8b7e90f6076751415cc6c2',
+    18,
+    'WETH',
+    'Wrapped Ether'
+  ),
 };
 
 export const BEACON_CHAIN_DEPOSIT_ADDRESS =
@@ -440,3 +445,39 @@ export function getAddress(currency: Currency): string {
     return ADDRESS_ZERO;
   }
 }
+
+// Add Aura Euphoria V2 Factory
+export const V2_FACTORY_ADDRESSES: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: FACTORY_ADDRESS,
+  [ChainId.GOERLI]: FACTORY_ADDRESS,
+  [ChainId.SEPOLIA]: FACTORY_ADDRESS,
+  [ChainId.OPTIMISM]: FACTORY_ADDRESS,
+  [ChainId.ARBITRUM_ONE]: FACTORY_ADDRESS,
+  [ChainId.POLYGON]: FACTORY_ADDRESS,
+  [ChainId.POLYGON_MUMBAI]: FACTORY_ADDRESS,
+  [ChainId.BASE]: FACTORY_ADDRESS,
+  [ChainId.AVALANCHE]: FACTORY_ADDRESS,
+  [ChainId.BNB]: FACTORY_ADDRESS,
+  [ChainId.UNICHAIN]: FACTORY_ADDRESS,
+  [ChainId.UNICHAIN_SEPOLIA]: FACTORY_ADDRESS,
+  [ChainId.MONAD_TESTNET]: FACTORY_ADDRESS,
+  [ChainId.AURA_EUPHORIA]: '0x6685B976504631b6C189d521586C02c7055371e6',
+};
+
+// Add Router V2 addresses for Aura Euphoria
+export const ROUTER_V2_ADDRESSES: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.GOERLI]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.SEPOLIA]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.OPTIMISM]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.ARBITRUM_ONE]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.POLYGON]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.POLYGON_MUMBAI]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.BASE]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.AVALANCHE]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.BNB]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.UNICHAIN]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.UNICHAIN_SEPOLIA]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.MONAD_TESTNET]: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+  [ChainId.AURA_EUPHORIA]: '0xD4e734A9f47B7FE08996B1E015105545e7B41559',
+};

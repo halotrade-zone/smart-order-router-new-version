@@ -186,6 +186,10 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     WRAPPED_NATIVE_CURRENCY[ChainId.SONEIUM]!,
     USDC_SONEIUM,
   ],
+  [ChainId.AURA_EUPHORIA]: [
+    nativeOnChain(ChainId.AURA_EUPHORIA),
+    WRAPPED_NATIVE_CURRENCY[ChainId.AURA_EUPHORIA]!,
+  ],
 };
 
 export interface IV3SubgraphProvider {

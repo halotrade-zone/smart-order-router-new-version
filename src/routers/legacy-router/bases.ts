@@ -224,3 +224,18 @@ export const CUSTOM_BASES = async (
     },
   };
 };
+
+export async function getRoutesTradingBaseTokens(
+  tokenProvider: ITokenProvider
+): Promise<{
+  [ChainId in ChainId]?: { [tokenAddress: string]: Token[] };
+}> {
+  return {
+    [ChainId.SONEIUM]: {
+      // For SONEIUM, the default will work
+    },
+    [ChainId.AURA_EUPHORIA]: {
+      // For AURA_EUPHORIA, the default will work
+    },
+  };
+}
