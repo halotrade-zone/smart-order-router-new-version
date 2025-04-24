@@ -1,5 +1,5 @@
+import { ChainId } from '@thienlk/sdk-core';
 import { Protocol } from '@uniswap/router-sdk';
-import { ChainId } from '@uniswap/sdk-core';
 
 import { CachingSubgraphProvider } from '../caching-subgraph-provider';
 

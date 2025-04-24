@@ -3,9 +3,9 @@ import {
   ChainId,
   CurrencyAmount as CurrencyAmountRaw,
   Token,
-} from '@uniswap/sdk-core';
+} from '@thienlk/sdk-core';
+import { Pool } from '@thienlk/v3-sdk';
 import { Pair } from '@uniswap/v2-sdk';
-import { Pool } from '@uniswap/v3-sdk';
 
 import { ProviderConfig } from '../../../providers/provider';
 import {
@@ -23,6 +23,8 @@ import {
   DAI_SEPOLIA,
   DAI_UNICHAIN,
   DAI_ZKSYNC,
+  TOKEN_A_AURA_EUPHORIA,
+  TOKEN_B_AURA_EUPHORIA,
   USDB_BLAST,
   USDCE_ZKSYNC,
   USDC_ARBITRUM,
@@ -135,6 +137,7 @@ export const usdGasTokensByChain: { [chainId in ChainId]?: Token[] } = {
   [ChainId.BASE_SEPOLIA]: [USDC_BASE_SEPOLIA],
   [ChainId.UNICHAIN]: [DAI_UNICHAIN, USDC_UNICHAIN],
   [ChainId.SONEIUM]: [USDC_SONEIUM],
+  [ChainId.AURA_EUPHORIA]: [TOKEN_A_AURA_EUPHORIA, TOKEN_B_AURA_EUPHORIA],
 };
 
 export type L1ToL2GasCosts = {

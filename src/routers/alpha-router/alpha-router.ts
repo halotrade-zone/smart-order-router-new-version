@@ -1,16 +1,16 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers';
-import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
-import { Protocol, SwapRouter, Trade, ZERO } from '@uniswap/router-sdk';
 import {
   ChainId,
   Currency,
   Fraction,
   Token,
   TradeType,
-} from '@uniswap/sdk-core';
+} from '@thienlk/sdk-core';
+import { Pool, Position, SqrtPriceMath, TickMath } from '@thienlk/v3-sdk';
+import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
+import { Protocol, SwapRouter, Trade, ZERO } from '@uniswap/router-sdk';
 import { TokenList } from '@uniswap/token-lists';
-import { Pool, Position, SqrtPriceMath, TickMath } from '@uniswap/v3-sdk';
 import retry from 'async-retry';
 import JSBI from 'jsbi';
 import _ from 'lodash';
@@ -151,6 +151,10 @@ import {
 import { UniversalRouterVersion } from '@uniswap/universal-router-sdk';
 import { DEFAULT_BLOCKS_TO_LIVE } from '../../util/defaultBlocksToLive';
 import { INTENT } from '../../util/intent';
+import {
+  castToUniswapPool,
+  castToUniswapPosition,
+} from '../../util/sdkCompatibility';
 import { serializeRouteIds } from '../../util/serializeRouteIds';
 import {
   DEFAULT_ROUTING_CONFIG_BY_CHAIN,
@@ -1087,6 +1091,9 @@ export class AlphaRouter
       this.chainId
     )
   ): Promise<SwapToRatioResponse> {
+    // Cast position to Uniswap Position type to maintain compatibility
+    const uniswapPosition = castToUniswapPosition(position);
+
     if (
       token1Balance.currency.wrapped.sortsBefore(token0Balance.currency.wrapped)
     ) {
@@ -1094,15 +1101,15 @@ export class AlphaRouter
     }
 
     let preSwapOptimalRatio = this.calculateOptimalRatio(
-      position,
-      position.pool.sqrtRatioX96,
+      uniswapPosition,
+      uniswapPosition.pool.sqrtRatioX96,
       true
     );
     // set up parameters according to which token will be swapped
     let zeroForOne: boolean;
-    if (position.pool.tickCurrent > position.tickUpper) {
+    if (uniswapPosition.pool.tickCurrent > uniswapPosition.tickUpper) {
       zeroForOne = true;
-    } else if (position.pool.tickCurrent < position.tickLower) {
+    } else if (uniswapPosition.pool.tickCurrent < uniswapPosition.tickLower) {
       zeroForOne = false;
     } else {
       zeroForOne = new Fraction(
@@ -1117,10 +1124,10 @@ export class AlphaRouter
       : [token1Balance, token0Balance];
 
     let optimalRatio = preSwapOptimalRatio;
-    let postSwapTargetPool = position.pool;
+    let postSwapTargetPool = uniswapPosition.pool;
     let exchangeRate: Fraction = zeroForOne
-      ? position.pool.token0Price
-      : position.pool.token1Price;
+      ? uniswapPosition.pool.token0Price
+      : uniswapPosition.pool.token1Price;
     let swap: SwapRoute | null = null;
     let ratioAchieved = false;
     let n = 0;
@@ -1180,15 +1187,15 @@ export class AlphaRouter
           const v3Route = route as V3RouteWithValidQuote;
           v3Route.route.pools.forEach((pool, i) => {
             if (
-              pool.token0.equals(position.pool.token0) &&
-              pool.token1.equals(position.pool.token1) &&
-              pool.fee === position.pool.fee
+              pool.token0.equals(uniswapPosition.pool.token0) &&
+              pool.token1.equals(uniswapPosition.pool.token1) &&
+              pool.fee === uniswapPosition.pool.fee
             ) {
               targetPoolPriceUpdate = JSBI.BigInt(
                 v3Route.sqrtPriceX96AfterList[i]!.toString()
               );
               optimalRatio = this.calculateOptimalRatio(
-                position,
+                uniswapPosition,
                 JSBI.BigInt(targetPoolPriceUpdate!.toString()),
                 zeroForOne
               );
@@ -1207,14 +1214,16 @@ export class AlphaRouter
 
       if (ratioAchieved && targetPoolPriceUpdate) {
         postSwapTargetPool = new Pool(
-          position.pool.token0,
-          position.pool.token1,
-          position.pool.fee,
+          uniswapPosition.pool.token0,
+          uniswapPosition.pool.token1,
+          uniswapPosition.pool.fee,
           targetPoolPriceUpdate,
-          position.pool.liquidity,
+          uniswapPosition.pool.liquidity,
           TickMath.getTickAtSqrtRatio(targetPoolPriceUpdate),
-          position.pool.tickDataProvider
+          uniswapPosition.pool.tickDataProvider
         );
+        // Cast the pool to Uniswap Pool type
+        postSwapTargetPool = castToUniswapPool(postSwapTargetPool);
       }
       exchangeRate = swap.trade!.outputAmount.divide(swap.trade!.inputAmount);
 
@@ -1254,7 +1263,7 @@ export class AlphaRouter
         {
           initialBalanceTokenIn: inputBalance,
           initialBalanceTokenOut: outputBalance,
-          preLiquidityPosition: position,
+          preLiquidityPosition: uniswapPosition,
         }
       );
     }
@@ -1786,7 +1795,6 @@ export class AlphaRouter
       // theoretically, when routingConfig.intent === INTENT.CACHING, optimisticCachedRoutes should be false
       // so that we can always pass in cachedRoutes?.notExpired(await blockNumber, !routingConfig.optimisticCachedRoutes)
       // but just to be safe, we just hardcode true when checking the cached routes expiry for write update
-      // we decide to not check cached routes expiry in the read path anyway
       if (!cachedRoutes?.notExpired(await blockNumber, true)) {
         // optimisticCachedRoutes === false means at routing-api level, we only want to set cached routes during intent=caching, not intent=quote
         // this means during the online quote endpoint path, we should not reset cached routes
@@ -2039,7 +2047,9 @@ export class AlphaRouter
         cachedRoutesRouteIds !== undefined &&
         // it's possible that top cached routes may be split routes,
         // so that we always serialize all the top 8 retrieved cached routes vs the top routes.
-        !cachedRoutesRouteIds.startsWith(serializeRouteIds(routesToCache.routes.map((r) => r.routeId)));
+        !cachedRoutesRouteIds.startsWith(
+          serializeRouteIds(routesToCache.routes.map((r) => r.routeId))
+        );
 
       if (cachedRoutesChanged) {
         metric.putMetric('cachedRoutesChanged', 1, MetricLoggerUnit.Count);

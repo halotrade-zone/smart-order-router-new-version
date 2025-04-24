@@ -1,14 +1,13 @@
 import { estimateL1Gas, estimateL1GasCost } from '@eth-optimism/sdk';
 import { BigNumber } from '@ethersproject/bignumber';
 import { BaseProvider, TransactionRequest } from '@ethersproject/providers';
+import { ChainId, Percent, Token, TradeType } from '@thienlk/sdk-core';
+import { Pair } from '@thienlk/v2-sdk';
+import { FeeAmount, Pool } from '@thienlk/v3-sdk';
 import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Percent, Token, TradeType } from '@uniswap/sdk-core';
 import { UniversalRouterVersion } from '@uniswap/universal-router-sdk';
-import { Pair } from '@uniswap/v2-sdk';
-import { FeeAmount, Pool } from '@uniswap/v3-sdk';
 import brotli from 'brotli';
 import JSBI from 'jsbi';
-import _ from 'lodash';
 
 import { IV2PoolProvider, IV4PoolProvider } from '../providers';
 import { IPortionProvider } from '../providers/portion-provider';
@@ -41,82 +40,118 @@ import {
 
 import { opStackChains } from './l2FeeChains';
 import { buildSwapMethodParameters, buildTrade } from './methodParameters';
+import { castToThienlkPair, castToThienlkPool } from './sdkCompatibility';
 
 export async function getV2NativePool(
   token: Token,
   poolProvider: IV2PoolProvider,
-  providerConfig?: GasModelProviderConfig
+  providerConfig?: ProviderConfig
 ): Promise<Pair | null> {
-  const chainId = token.chainId as ChainId;
-  const weth = WRAPPED_NATIVE_CURRENCY[chainId]!;
+  const wrappedNative =
+    WRAPPED_NATIVE_CURRENCY[
+      token.chainId as keyof typeof WRAPPED_NATIVE_CURRENCY
+    ]!;
 
   const poolAccessor = await poolProvider.getPools(
-    [[weth, token]],
+    [[wrappedNative, token]],
     providerConfig
   );
-  const pool = poolAccessor.getPool(weth, token);
+  const pool = poolAccessor.getPool(wrappedNative, token);
 
-  if (!pool || pool.reserve0.equalTo(0) || pool.reserve1.equalTo(0)) {
+  if (!pool) {
     log.error(
       {
-        weth,
-        token,
-        reserve0: pool?.reserve0.toExact(),
-        reserve1: pool?.reserve1.toExact(),
+        tokenAddress: token.address,
+        nativeAddress: wrappedNative.address,
       },
-      `Could not find a valid WETH V2 pool with ${token.symbol} for computing gas costs.`
+      'Could not find a V2 pool with native currency.'
     );
-
     return null;
   }
 
-  return pool;
+  // Cast to custom SDK type
+  return castToThienlkPair(pool);
 }
 
 export async function getHighestLiquidityV3NativePool(
   token: Token,
   poolProvider: IV3PoolProvider,
-  providerConfig?: GasModelProviderConfig
+  providerConfig?: ProviderConfig
 ): Promise<Pool | null> {
-  const nativeCurrency = WRAPPED_NATIVE_CURRENCY[token.chainId as ChainId]!;
+  const nativeV3Pool = await getHighestLiquidityV3Pool(
+    WRAPPED_NATIVE_CURRENCY[
+      token.chainId as keyof typeof WRAPPED_NATIVE_CURRENCY
+    ]!,
+    token,
+    poolProvider,
+    providerConfig,
+    FeeAmount.MEDIUM,
+    FeeAmount.LOW,
+    FeeAmount.LOWEST,
+    FeeAmount.HIGH
+  );
 
-  const feeAmounts = getApplicableV3FeeAmounts(token.chainId);
-
-  const nativePools = _(feeAmounts)
-    .map<[Token, Token, FeeAmount]>((feeAmount) => {
-      return [nativeCurrency, token, feeAmount];
-    })
-    .value();
-
-  const poolAccessor = await poolProvider.getPools(nativePools, providerConfig);
-
-  const pools = _(feeAmounts)
-    .map((feeAmount) => {
-      return poolAccessor.getPool(nativeCurrency, token, feeAmount);
-    })
-    .compact()
-    .value();
-
-  if (pools.length == 0) {
+  if (!nativeV3Pool) {
     log.error(
-      { pools },
-      `Could not find a ${nativeCurrency.symbol} pool with ${token.symbol} for computing gas costs.`
+      {
+        tokenAddress: token.address,
+      },
+      'Could not find a V3 pool with native currency.'
     );
-
     return null;
   }
 
-  const maxPool = pools.reduce((prev, current) => {
-    return JSBI.greaterThan(prev.liquidity, current.liquidity) ? prev : current;
-  });
+  // Cast to custom SDK type
+  return castToThienlkPool(nativeV3Pool);
+}
 
-  return maxPool;
+export async function getHighestLiquidityV3Pool(
+  tokenA: Token,
+  tokenB: Token,
+  poolProvider: IV3PoolProvider,
+  providerConfig?: ProviderConfig,
+  ...feeAmounts: FeeAmount[]
+): Promise<Pool | null> {
+  const pools = await poolProvider.getPools(
+    feeAmounts.map((feeAmount) => [tokenA, tokenB, feeAmount]),
+    providerConfig
+  );
+
+  let maxPool: Pool | null = null;
+  let maxLiquidity = JSBI.BigInt(0);
+
+  for (const feeAmount of feeAmounts) {
+    const pool = pools.getPool(tokenA, tokenB, feeAmount);
+    if (
+      pool &&
+      JSBI.greaterThan(pool.liquidity, JSBI.BigInt(0)) &&
+      (maxPool === null || JSBI.greaterThan(pool.liquidity, maxLiquidity))
+    ) {
+      maxPool = pool;
+      maxLiquidity = pool.liquidity;
+    }
+  }
+
+  if (!maxPool) {
+    log.error(
+      {
+        tokenAAddress: tokenA.address,
+        tokenBAddress: tokenB.address,
+        feeAmounts: feeAmounts,
+      },
+      'Could not find a V3 pool with sufficient liquidity for this token pair and fee tier.'
+    );
+    return null;
+  }
+
+  // Cast to custom SDK type
+  return castToThienlkPool(maxPool);
 }
 
 export async function getHighestLiquidityV3USDPool(
   chainId: ChainId,
   poolProvider: IV3PoolProvider,
-  providerConfig?: GasModelProviderConfig
+  providerConfig?: ProviderConfig
 ): Promise<Pool> {
   const usdTokens = usdGasTokensByChain[chainId];
   const wrappedCurrency = WRAPPED_NATIVE_CURRENCY[chainId]!;
@@ -127,44 +162,41 @@ export async function getHighestLiquidityV3USDPool(
     );
   }
 
-  const feeAmounts = getApplicableV3FeeAmounts(chainId);
+  const usdPools = [];
+  for (const usdToken of usdTokens) {
+    try {
+      const isSorted = wrappedCurrency.sortsBefore(usdToken);
+      const [token0, token1] = isSorted
+        ? [wrappedCurrency, usdToken]
+        : [usdToken, wrappedCurrency];
 
-  const usdPools = _(feeAmounts)
-    .flatMap((feeAmount) => {
-      return _.map<Token, [Token, Token, FeeAmount]>(usdTokens, (usdToken) => [
-        wrappedCurrency,
-        usdToken,
-        feeAmount,
-      ]);
-    })
-    .value();
+      const pool = await getHighestLiquidityV3Pool(
+        token0,
+        token1,
+        poolProvider,
+        providerConfig,
+        ...getApplicableV3FeeAmounts(chainId)
+      );
 
-  const poolAccessor = await poolProvider.getPools(usdPools, providerConfig);
-
-  const pools = _(feeAmounts)
-    .flatMap((feeAmount) => {
-      const pools = [];
-
-      for (const usdToken of usdTokens) {
-        const pool = poolAccessor.getPool(wrappedCurrency, usdToken, feeAmount);
-        if (pool) {
-          pools.push(pool);
-        }
+      if (pool) {
+        usdPools.push(pool);
       }
-
-      return pools;
-    })
-    .compact()
-    .value();
-
-  if (pools.length == 0) {
-    const message = `Could not find a USD/${wrappedCurrency.symbol} pool for computing gas costs.`;
-    log.error({ pools }, message);
-    throw new Error(message);
+    } catch (err) {
+      log.error(
+        { err },
+        `Unable to get USD gas pool with ${wrappedCurrency.symbol} and ${usdToken.symbol}`
+      );
+    }
   }
 
-  const maxPool = pools.reduce((prev, current) => {
-    return JSBI.greaterThan(prev.liquidity, current.liquidity) ? prev : current;
+  if (usdPools.length === 0) {
+    throw new Error(
+      `Could not find a USD/${wrappedCurrency.symbol} pool for computing gas costs on ${chainId}`
+    );
+  }
+
+  const maxPool = usdPools.reduce((prev, current) => {
+    return JSBI.greaterThan(current.liquidity, prev.liquidity) ? current : prev;
   });
 
   return maxPool;

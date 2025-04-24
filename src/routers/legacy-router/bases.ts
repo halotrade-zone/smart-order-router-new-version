@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@thienlk/sdk-core';
 
 import {
   BTC_BNB,
@@ -9,6 +9,8 @@ import {
   DAI_MAINNET,
   DAI_UNICHAIN,
   ITokenProvider,
+  TOKEN_A_AURA_EUPHORIA,
+  TOKEN_B_AURA_EUPHORIA,
   USDB_BLAST,
   USDCE_ZKSYNC,
   USDC_AVAX,
@@ -120,6 +122,11 @@ export const BASES_TO_CHECK_TRADES_AGAINST = (
       WRAPPED_NATIVE_CURRENCY[ChainId.SONEIUM]!,
       USDC_SONEIUM,
     ],
+    [ChainId.AURA_EUPHORIA]: [
+      WRAPPED_NATIVE_CURRENCY[ChainId.AURA_EUPHORIA]!,
+      TOKEN_A_AURA_EUPHORIA,
+      TOKEN_B_AURA_EUPHORIA,
+    ],
   };
 };
 
@@ -194,6 +201,18 @@ export const ADDITIONAL_BASES = async (
         '0xeb4c2781e4eba804ce9a9803c67d0893436bb27d',
         '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
       )),
+    },
+    // ...existing code...
+
+    [ChainId.AURA_EUPHORIA]: {
+      // Add your tokens as bases for Aura Euphoria
+      // The key is the token address, and the value is an array of base tokens
+      '0xa9f74da63d4796f97744c8fc7df422087dce940c': [
+        // TOKEN_A_AURA_EUPHORIA
+      ],
+      '0x220c08739c70a3e33b8b7e90f6076751415cc6c2': [
+        // TOKEN_B_AURA_EUPHORIA
+      ],
     },
   };
 };

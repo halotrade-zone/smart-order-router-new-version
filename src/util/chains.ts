@@ -4,7 +4,7 @@ import {
   Ether,
   NativeCurrency,
   Token,
-} from '@uniswap/sdk-core';
+} from '@thienlk/sdk-core';
 
 // WIP: Gnosis, Moonbeam
 export const SUPPORTED_CHAINS: ChainId[] = [
@@ -32,6 +32,7 @@ export const SUPPORTED_CHAINS: ChainId[] = [
   ChainId.MONAD_TESTNET,
   ChainId.BASE_SEPOLIA,
   ChainId.SONEIUM,
+  ChainId.AURA_EUPHORIA,
   // Gnosis and Moonbeam don't yet have contracts deployed yet
 ];
 
@@ -48,6 +49,31 @@ export const V2_SUPPORTED = [
   ChainId.UNICHAIN_SEPOLIA,
   ChainId.UNICHAIN,
   ChainId.SONEIUM,
+  ChainId.AURA_EUPHORIA,
+];
+
+export const V3_SUPPORTED = [
+  ChainId.MAINNET,
+  ChainId.OPTIMISM,
+  ChainId.ARBITRUM_ONE,
+  ChainId.POLYGON,
+  ChainId.POLYGON_MUMBAI,
+  ChainId.CELO,
+  ChainId.CELO_ALFAJORES,
+  ChainId.GOERLI,
+  ChainId.SEPOLIA,
+  ChainId.BNB,
+  ChainId.AVALANCHE,
+  ChainId.BASE,
+  ChainId.BLAST,
+  ChainId.ZORA,
+  ChainId.WORLDCHAIN,
+  ChainId.UNICHAIN_SEPOLIA,
+  ChainId.MONAD_TESTNET,
+  ChainId.BASE_SEPOLIA,
+  ChainId.UNICHAIN,
+  ChainId.SONEIUM,
+  ChainId.AURA_EUPHORIA,
 ];
 
 export const V4_SUPPORTED = [
@@ -63,6 +89,7 @@ export const V4_SUPPORTED = [
   ChainId.UNICHAIN_SEPOLIA,
   ChainId.UNICHAIN,
   ChainId.SONEIUM,
+  ChainId.AURA_EUPHORIA,
 ];
 
 export const MIXED_SUPPORTED = [
@@ -80,6 +107,7 @@ export const MIXED_SUPPORTED = [
   ChainId.WORLDCHAIN,
   ChainId.ZORA,
   ChainId.SONEIUM,
+  ChainId.AURA_EUPHORIA,
 ];
 
 export const HAS_L1_FEE = [
@@ -167,6 +195,8 @@ export const ID_TO_CHAIN_ID = (id: number): ChainId => {
       return ChainId.UNICHAIN;
     case 1868:
       return ChainId.SONEIUM;
+    case 6321:
+      return ChainId.AURA_EUPHORIA;
     default:
       throw new Error(`Unknown chain id: ${id}`);
   }
@@ -201,6 +231,7 @@ export enum ChainName {
   UNICHAIN = 'unichain-mainnet',
   MONAD_TESTNET = 'monad-testnet',
   SONEIUM = 'soneium-mainnet',
+  AURA_EUPHORIA = 'aura-euphoria',
 }
 
 export enum NativeCurrencyName {
@@ -326,6 +357,11 @@ export const NATIVE_NAMES_BY_ID: { [chainId: number]: string[] } = {
     'ETHER',
     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
   ],
+  [ChainId.AURA_EUPHORIA]: [
+    'ETH',
+    'ETHER',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+  ],
 };
 
 export const NATIVE_CURRENCY: { [chainId: number]: NativeCurrencyName } = {
@@ -356,6 +392,7 @@ export const NATIVE_CURRENCY: { [chainId: number]: NativeCurrencyName } = {
   [ChainId.BASE_SEPOLIA]: NativeCurrencyName.ETHER,
   [ChainId.UNICHAIN]: NativeCurrencyName.ETHER,
   [ChainId.SONEIUM]: NativeCurrencyName.ETHER,
+  [ChainId.AURA_EUPHORIA]: NativeCurrencyName.ETHER,
 };
 
 export const ID_TO_NETWORK_NAME = (id: number): ChainName => {
@@ -416,6 +453,8 @@ export const ID_TO_NETWORK_NAME = (id: number): ChainName => {
       return ChainName.MONAD_TESTNET;
     case 1868:
       return ChainName.SONEIUM;
+    case 6321:
+      return ChainName.AURA_EUPHORIA;
     default:
       throw new Error(`Unknown chain id: ${id}`);
   }
@@ -477,6 +516,8 @@ export const ID_TO_PROVIDER = (id: ChainId): string => {
       return process.env.JSON_RPC_PROVIDER_UNICHAIN!;
     case ChainId.SONEIUM:
       return process.env.JSON_RPC_PROVIDER_SONEIUM!;
+    case ChainId.AURA_EUPHORIA:
+      return process.env.JSON_RPC_PROVIDER_AURA_EUPHORIA || "https://jsonrpc.euphoria.aura.network";
     default:
       throw new Error(`Chain id: ${id} not supported`);
   }
@@ -691,6 +732,13 @@ export const WRAPPED_NATIVE_CURRENCY: { [chainId in ChainId]: Token } = {
   [ChainId.SONEIUM]: new Token(
     ChainId.SONEIUM,
     '0x4200000000000000000000000000000000000006',
+    18,
+    'WETH',
+    'Wrapped Ether'
+  ),
+  [ChainId.AURA_EUPHORIA]: new Token(
+    ChainId.AURA_EUPHORIA,
+    '0x220c08739c70a3e33b8b7e90f6076751415cc6c2',
     18,
     'WETH',
     'Wrapped Ether'

@@ -4,17 +4,17 @@
  * @export
  * @interface IRouteCachingProvider
  */
-import { Protocol } from '@uniswap/router-sdk';
 import {
   ChainId,
   Currency,
   CurrencyAmount,
   TradeType,
-} from '@uniswap/sdk-core';
+} from '@thienlk/sdk-core';
+import { Protocol } from '@uniswap/router-sdk';
 
+import { AlphaRouterConfig } from '../../../routers';
 import { CacheMode } from './model';
 import { CachedRoutes } from './model/cached-routes';
-import { AlphaRouterConfig } from '../../../routers';
 
 /**
  * Abstract class for a RouteCachingProvider.
@@ -42,7 +42,7 @@ export abstract class IRouteCachingProvider {
     protocols: Protocol[],
     blockNumber: number,
     optimistic = false,
-    alphaRouterConfig?: AlphaRouterConfig,
+    alphaRouterConfig?: AlphaRouterConfig
   ): Promise<CachedRoutes | undefined> => {
     if (
       (await this.getCacheMode(
@@ -64,7 +64,7 @@ export abstract class IRouteCachingProvider {
       protocols,
       blockNumber,
       optimistic,
-      alphaRouterConfig,
+      alphaRouterConfig
     );
 
     return this.filterExpiredCachedRoutes(cachedRoute, blockNumber, optimistic);
@@ -169,7 +169,7 @@ export abstract class IRouteCachingProvider {
     protocols: Protocol[],
     currentBlockNumber: number,
     optimistic: boolean,
-    alphaRouterConfig?: AlphaRouterConfig,
+    alphaRouterConfig?: AlphaRouterConfig
   ): Promise<CachedRoutes | undefined>;
 
   /**

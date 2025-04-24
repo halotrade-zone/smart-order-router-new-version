@@ -1,5 +1,5 @@
+import { ChainId, Currency, Token, TradeType } from '@thienlk/sdk-core';
 import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Currency, Token, TradeType } from '@uniswap/sdk-core';
 import _ from 'lodash';
 
 import {

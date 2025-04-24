@@ -162,7 +162,6 @@ Total ticks crossed: 7
 ./bin/cli quote --tokenIn 0x7F5c764cBc14f9669B88837ca1490cCa17c31607 --tokenOut 0x4200000000000000000000000000000000000042 --amount 1 --exactIn --minSplits 1 --protocols v2 --router alpha --chainId 10
 ```
 
-
 ## Optimism-Goerli
 
 ```
@@ -269,6 +268,12 @@ Total ticks crossed: 7
 
 ```
 ./bin/cli quote --tokenIn 0x4200000000000000000000000000000000000006 --tokenOut 0xbA9986D2381edf1DA03B0B9c1f8b00dc4AacC369 --amount 0.1 --exactIn --minSplits 1 --protocols v3 --router alpha --chainId 1868
+```
+
+## Aura Euphoria
+
+```
+./bin/cli quote --tokenIn 0x220c08739c70a3e33b8b7e90f6076751415cc6c2 --tokenOut 0xa9f74da63d4796f97744c8fc7df422087dce940c --amount 0.1 --exactIn --minSplits 1 --protocols v2 --router alpha --chainId 6321
 ```
 
 ## Adding a new Chain

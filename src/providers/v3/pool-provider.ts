@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@thienlk/sdk-core';
 import { computePoolAddress, FeeAmount, Pool } from '@uniswap/v3-sdk';
 import retry, { Options as RetryOptions } from 'async-retry';
 
@@ -179,7 +179,7 @@ export class V3PoolProvider
       tokenB: token1,
       fee: feeAmount,
       initCodeHashManualOverride: undefined,
-      chainId: this.chainId,
+      chainId: undefined,
     });
 
     this.POOL_ADDRESS_CACHE[cacheKey] = poolAddress;

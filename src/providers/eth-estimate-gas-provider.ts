@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { ChainId } from '@uniswap/sdk-core';
+import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers';
+import { ChainId } from '@thienlk/sdk-core';
 
 import {
   GasModelProviderConfig,
@@ -33,14 +33,14 @@ export class EthEstimateGasSimulator extends Simulator {
 
   constructor(
     chainId: ChainId,
-    provider: JsonRpcProvider,
+    provider: BaseProvider,
     v2PoolProvider: IV2PoolProvider,
     v3PoolProvider: IV3PoolProvider,
     v4PoolProvider: IV4PoolProvider,
     portionProvider: IPortionProvider,
     overrideEstimateMultiplier?: { [chainId in ChainId]?: number }
   ) {
-    super(provider, portionProvider, chainId);
+    super(provider as unknown as JsonRpcProvider, portionProvider, chainId);
     this.v2PoolProvider = v2PoolProvider;
     this.v3PoolProvider = v3PoolProvider;
     this.v4PoolProvider = v4PoolProvider;

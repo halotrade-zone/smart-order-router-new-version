@@ -1,5 +1,5 @@
+import { ChainId, Currency, Token } from '@thienlk/sdk-core';
 import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Currency, Token } from '@uniswap/sdk-core';
 
 import { SubgraphPool } from '../routers/alpha-router/functions/get-candidate-pools';
 import { nativeOnChain, WRAPPED_NATIVE_CURRENCY } from '../util';
@@ -23,6 +23,8 @@ import {
   DAI_UNICHAIN,
   ETH_BNB,
   OP_OPTIMISM,
+  TOKEN_A_AURA_EUPHORIA,
+  TOKEN_B_AURA_EUPHORIA,
   USDB_BLAST,
   USDCE_ZKSYNC,
   USDC_ARBITRUM,
@@ -185,6 +187,12 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     nativeOnChain(ChainId.SONEIUM),
     WRAPPED_NATIVE_CURRENCY[ChainId.SONEIUM]!,
     USDC_SONEIUM,
+  ],
+  [ChainId.AURA_EUPHORIA]: [
+    nativeOnChain(ChainId.AURA_EUPHORIA),
+    WRAPPED_NATIVE_CURRENCY[ChainId.AURA_EUPHORIA]!,
+    TOKEN_A_AURA_EUPHORIA,
+    TOKEN_B_AURA_EUPHORIA,
   ],
 };
 

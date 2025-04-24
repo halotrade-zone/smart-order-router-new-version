@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@thienlk/sdk-core';
 import { Pair } from '@uniswap/v2-sdk';
 import _ from 'lodash';
 
@@ -21,6 +21,8 @@ import {
   DAI_UNICHAIN,
   ETH_BNB,
   OP_OPTIMISM,
+  TOKEN_A_AURA_EUPHORIA,
+  TOKEN_B_AURA_EUPHORIA,
   USDB_BLAST,
   USDCE_ZKSYNC,
   USDC_ARBITRUM,
@@ -153,6 +155,11 @@ const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     USDC_BASE_SEPOLIA,
   ],
   [ChainId.SONEIUM]: [WRAPPED_NATIVE_CURRENCY[ChainId.SONEIUM]!, USDC_SONEIUM],
+  [ChainId.AURA_EUPHORIA]: [
+    WRAPPED_NATIVE_CURRENCY[ChainId.AURA_EUPHORIA]!,
+    TOKEN_A_AURA_EUPHORIA,
+    TOKEN_B_AURA_EUPHORIA,
+  ],
 };
 
 /**

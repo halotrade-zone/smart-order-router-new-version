@@ -1,7 +1,7 @@
 import { Interface } from '@ethersproject/abi';
 import { BigNumber } from '@ethersproject/bignumber';
 import { parseBytes32String } from '@ethersproject/strings';
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@thienlk/sdk-core';
 import _ from 'lodash';
 
 import { IERC20Metadata__factory } from '../types/v3/factories/IERC20Metadata__factory';
@@ -796,6 +796,23 @@ export const USDC_SONEIUM = new Token(
   6,
   'USDCE',
   'Soneium Bridged USDC Soneium'
+);
+
+// Aura Euphoria Tokens
+export const TOKEN_A_AURA_EUPHORIA = new Token(
+  ChainId.AURA_EUPHORIA,
+  '0xa9f74da63d4796f97744c8fc7df422087dce940c',
+  18,
+  'TOKEN_A',
+  'Token A on Aura Euphoria'
+);
+
+export const TOKEN_B_AURA_EUPHORIA = new Token(
+  ChainId.AURA_EUPHORIA,
+  '0x220c08739c70a3e33b8b7e90f6076751415cc6c2',
+  18,
+  'TOKEN_B',
+  'Token B on Aura Euphoria'
 );
 
 export class TokenProvider implements ITokenProvider {

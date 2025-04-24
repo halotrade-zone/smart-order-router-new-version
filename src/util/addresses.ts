@@ -4,11 +4,27 @@ import {
   Currency,
   SWAP_ROUTER_02_ADDRESSES as SWAP_ROUTER_02_ADDRESSES_HELPER,
   Token,
-} from '@uniswap/sdk-core';
-import { FACTORY_ADDRESS } from '@uniswap/v3-sdk';
+} from '@thienlk/sdk-core';
+import { FACTORY_ADDRESS } from '@thienlk/v3-sdk';
 
 import { ADDRESS_ZERO } from '@uniswap/router-sdk';
 import { NETWORKS_WITH_SAME_UNISWAP_ADDRESSES } from './chains';
+
+// Define custom addresses for Aura Euphoria since they're missing in the SDK
+const AURA_EUPHORIA_ADDRESSES = {
+  v3CoreFactoryAddress: '0x7789082672b6E5b39B888ad4ef73E1FB39ab0815',
+  quoterAddress: '0xE095e79D850F44CcF27Df972030A20b6D4A128cC',
+  multicallAddress: '0x12F37127C0E4B107f33cc3A58A4BE0F82359D509',
+  v3MigratorAddress: '0x0000000000000000000000000000000000000000', // Placeholder
+  tickLensAddress: '0x0000000000000000000000000000000000000000', // Placeholder
+  nonfungiblePositionManagerAddress:
+    '0x0000000000000000000000000000000000000000', // Placeholder
+  swapRouter02Address: '0x2ABe778C56140d4C48CB7d7CD98137b8D53E0De3',
+  mixedRouteQuoterV1Address: '0x0000000000000000000000000000000000000000', // Placeholder
+  mixedRouteQuoterV2Address: '0xE095e79D850F44CcF27Df972030A20b6D4A128cC', // Using quoter address
+  v4QuoterAddress: '0x0000000000000000000000000000000000000000', // Placeholder
+  v4StateView: '0x0000000000000000000000000000000000000000', // Placeholder
+};
 
 export const BNB_TICK_LENS_ADDRESS =
   CHAIN_TO_ADDRESSES_MAP[ChainId.BNB].tickLensAddress;
@@ -56,6 +72,7 @@ export const V3_CORE_FACTORY_ADDRESSES: AddressMap = {
     CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN].v3CoreFactoryAddress,
   [ChainId.SONEIUM]:
     CHAIN_TO_ADDRESSES_MAP[ChainId.SONEIUM].v3CoreFactoryAddress,
+  [ChainId.AURA_EUPHORIA]: '0x12F37127C0E4B107f33cc3A58A4BE0F82359D509',
 };
 
 export const QUOTER_V2_ADDRESSES: AddressMap = {
@@ -91,6 +108,7 @@ export const QUOTER_V2_ADDRESSES: AddressMap = {
   // TODO: Gnosis + Moonbeam contracts to be deployed
   [ChainId.UNICHAIN]: CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN].quoterAddress,
   [ChainId.SONEIUM]: CHAIN_TO_ADDRESSES_MAP[ChainId.SONEIUM].quoterAddress,
+  [ChainId.AURA_EUPHORIA]: '0xE095e79D850F44CcF27Df972030A20b6D4A128cC',
 };
 
 export const NEW_QUOTER_V2_ADDRESSES: AddressMap = {
@@ -172,6 +190,7 @@ export const MIXED_ROUTE_QUOTER_V2_ADDRESSES: AddressMap = {
   [ChainId.WORLDCHAIN]: '0x9D0F15f2cf58655fDDcD1EE6129C547fDaeD01b1',
   [ChainId.ZORA]: '0x5f739c790a48E97eec0efb81bab5D152c0A0ecA0',
   [ChainId.SONEIUM]: '0x42c14CE921e85bf14467A82fAf8182546cf7c604',
+  [ChainId.AURA_EUPHORIA]: '0xE095e79D850F44CcF27Df972030A20b6D4A128cC', // Using Quoter address for now
 };
 
 export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
@@ -208,6 +227,7 @@ export const UNISWAP_MULTICALL_ADDRESSES: AddressMap = {
   // TODO: Gnosis + Moonbeam contracts to be deployed
   [ChainId.UNICHAIN]: CHAIN_TO_ADDRESSES_MAP[ChainId.UNICHAIN].multicallAddress,
   [ChainId.SONEIUM]: CHAIN_TO_ADDRESSES_MAP[ChainId.SONEIUM].multicallAddress,
+  [ChainId.AURA_EUPHORIA]: '0x7789082672b6E5b39B888ad4ef73E1FB39ab0815',
 };
 
 export const SWAP_ROUTER_02_ADDRESSES = (chainId: number): string => {
@@ -215,6 +235,18 @@ export const SWAP_ROUTER_02_ADDRESSES = (chainId: number): string => {
     SWAP_ROUTER_02_ADDRESSES_HELPER(chainId) ??
     '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
   );
+};
+
+// Add V2 router address definition for Aura Euphoria
+export const V2_ROUTER_ADDRESS: AddressMap = {
+  ...constructSameAddressMap('0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'),
+  [ChainId.AURA_EUPHORIA]: '0x2ABe778C56140d4C48CB7d7CD98137b8D53E0De3',
+};
+
+// Add V2 factory address definition for Aura Euphoria
+export const V2_FACTORY_ADDRESSES: AddressMap = {
+  ...constructSameAddressMap('0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'),
+  [ChainId.AURA_EUPHORIA]: '0x361A1E6b340F6bC686F018f20b9687DD3e542dfb',
 };
 
 export const STATE_VIEW_ADDRESSES: AddressMap = {
@@ -278,6 +310,7 @@ export const WETH9: {
     | ChainId.MONAD_TESTNET
     // TODO: remove ROOTSTOCK once we support both at the routing level
     | ChainId.ROOTSTOCK
+    | ChainId.AURA_EUPHORIA
   >]: Token;
 } = {
   [ChainId.MAINNET]: new Token(
